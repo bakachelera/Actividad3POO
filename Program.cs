@@ -1,54 +1,93 @@
-﻿namespace Act2OOP;
-using System;
-using System.Collections.Generic;
-
-// Clase Empleado
-class Empleado // se declara la clase empleado con sus campos a usar.
+﻿namespace Act3OOP // 
 {
-	public string Nombre { get; set; }
-	public string Cargo { get; set; }
-	public double Salario { get; set; }
+	using System;
+	using System.Collections.Generic;
 
-	// Constructor
-	public Empleado(string nombre, string cargo, double salario) //aqui declaramos un objeto Empleado publico, que sera el constructor para el Empleado.
+	// Clase base Empleado
+	class Empleado
 	{
-		Nombre = nombre;
-		Cargo = cargo;
-		Salario = salario;
-	}
+		public string Nombre { get; set; }
+		public string Cargo { get; set; }
+		public double Salario { get; set; }
 
-	// Método para calcular bonificación
-	public double CalcularBonificacion(double porcentaje) //un ejemplo de metodo para calcular alguna bonificacion, tal vez algun subsidio ó prestación.
-	{
-		return Salario * (porcentaje / 100);
-	}
-
-	// Método para mostrar la información del empleado
-	public void MostrarInfo() // este metodo muestra la info de algun empleado.
-	{
-		Console.WriteLine($"Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
-	}
-}
-
-// Clase principal
-class Program
-{
-	static void Main()
-	{
-		List<Empleado> empleados = new List<Empleado>();
-
-		// Agregar empleados
-		empleados.Add(new Empleado("Juan Pérez", "Desarrollador", 3500));
-		empleados.Add(new Empleado("Ana Gómez", "Gerente", 5000));
-
-		// Mostrar empleados
-		Console.WriteLine("Lista de empleados:");
-		foreach (var emp in empleados)
+		// Constructor
+		public Empleado(string nombre, string cargo, double salario)
 		{
-			emp.MostrarInfo();
-			double bonificacion = emp.CalcularBonificacion(10);
-			Console.WriteLine($"Bonificación (10%): {bonificacion:C}");
-			Console.WriteLine();
+			Nombre = nombre;
+			Cargo = cargo;
+			Salario = salario;
+		}
+
+		// Método para calcular bonificación
+		public virtual double CalcularBonificacion()
+		{
+			// Implementación básica
+			return Salario * 0.10;  // 10% de bonificación por defecto
+		}
+
+		// Método para mostrar la información del empleado
+		public virtual void MostrarInfo()
+		{
+			Console.WriteLine($"Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
+		}
+	}
+
+	// Clase derivada para Empleado Administrativo
+	class EmpleadoAdministrativo : Empleado
+	{
+		public EmpleadoAdministrativo(string nombre, double salario) : base(nombre, "Administrativo", salario) { }
+
+		// Sobrescribimos el método para calcular bonificación, por ejemplo, 12% para Administrativos
+		public override double CalcularBonificacion()
+		{
+			return Salario * 0.12;  // 12% de bonificación para administrativos
+		}
+
+		// Sobrescribimos el método para mostrar la información del Administrativo
+		public override void MostrarInfo()
+		{
+			Console.WriteLine($"(Administrativo) Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
+		}
+	}
+
+	// Clase derivada para Empleado Operativo
+	class EmpleadoOperativo : Empleado
+	{
+		public EmpleadoOperativo(string nombre, double salario) : base(nombre, "Operativo", salario) { }
+
+		// Sobrescribimos el método para calcular bonificación, por ejemplo, 8% para Operativos
+		public override double CalcularBonificacion()
+		{
+			return Salario * 0.08;  // 8% de bonificación para operativos
+		}
+
+		// Sobrescribimos el método para mostrar la información del Operativo
+		public override void MostrarInfo()
+		{
+			Console.WriteLine($"(Operativo) Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
+		}
+	}
+
+	// Clase principal
+	class Program
+	{
+		static void Main()
+		{
+			List<Empleado> empleados = new List<Empleado>();
+
+			// Agregar empleados de tipo Administrativo y Operativo
+			empleados.Add(new EmpleadoAdministrativo("Carlos López", 4000));
+			empleados.Add(new EmpleadoOperativo("Marta Pérez", 2800));
+
+			// Mostrar empleados
+			Console.WriteLine("Lista de empleados:");
+			foreach (var emp in empleados)
+			{
+				emp.MostrarInfo();
+				double bonificacion = emp.CalcularBonificacion();
+				Console.WriteLine($"Bonificación: {bonificacion:C}");
+				Console.WriteLine();
+			}
 		}
 	}
 }
