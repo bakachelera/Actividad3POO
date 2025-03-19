@@ -1,93 +1,93 @@
-﻿namespace Act3OOP // 
+﻿using System;
+namespace Act4oop;
+// Clase abstracta Producto
+// Define la estructura común de todos los productos con atributos Nombre y Precio.
+// También declara un método abstracto que será implementado por las subclases.
+abstract class Producto
 {
-	using System;
-	using System.Collections.Generic;
+	protected string Nombre;
+	protected double Precio;
 
-	// Clase base Empleado
-	class Empleado
+	public Producto(string nombre, double precio)
 	{
-		public string Nombre { get; set; }
-		public string Cargo { get; set; }
-		public double Salario { get; set; }
-
-		// Constructor
-		public Empleado(string nombre, string cargo, double salario)
-		{
-			Nombre = nombre;
-			Cargo = cargo;
-			Salario = salario;
-		}
-
-		// Método para calcular bonificación
-		public virtual double CalcularBonificacion()
-		{
-			// Implementación básica
-			return Salario * 0.10;  // 10% de bonificación por defecto
-		}
-
-		// Método para mostrar la información del empleado
-		public virtual void MostrarInfo()
-		{
-			Console.WriteLine($"Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
-		}
+		Nombre = nombre;
+		Precio = precio;
 	}
 
-	// Clase derivada para Empleado Administrativo
-	class EmpleadoAdministrativo : Empleado
+	public abstract void MostrarDetalles(); // Método abstracto que cada subclase implementará.
+}
+
+// Subclase Electronico
+// Representa productos electrónicos y añade un atributo específico: Marca.
+class Electronico : Producto
+{
+	private string Marca;
+
+	public Electronico(string nombre, double precio, string marca) : base(nombre, precio)
 	{
-		public EmpleadoAdministrativo(string nombre, double salario) : base(nombre, "Administrativo", salario) { }
-
-		// Sobrescribimos el método para calcular bonificación, por ejemplo, 12% para Administrativos
-		public override double CalcularBonificacion()
-		{
-			return Salario * 0.12;  // 12% de bonificación para administrativos
-		}
-
-		// Sobrescribimos el método para mostrar la información del Administrativo
-		public override void MostrarInfo()
-		{
-			Console.WriteLine($"(Administrativo) Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
-		}
+		Marca = marca;
 	}
 
-	// Clase derivada para Empleado Operativo
-	class EmpleadoOperativo : Empleado
+	// Implementación del método MostrarDetalles con información específica de productos electrónicos.
+	public override void MostrarDetalles()
 	{
-		public EmpleadoOperativo(string nombre, double salario) : base(nombre, "Operativo", salario) { }
+		Console.WriteLine($"Electrónico: {Nombre}, Marca: {Marca}, Precio: ${Precio}");
+	}
+}
 
-		// Sobrescribimos el método para calcular bonificación, por ejemplo, 8% para Operativos
-		public override double CalcularBonificacion()
-		{
-			return Salario * 0.08;  // 8% de bonificación para operativos
-		}
+// Subclase Alimento
+// Representa productos alimenticios e incorpora un atributo para la fecha de expiración.
+class Alimento : Producto
+{
+	private string FechaExpiracion;
 
-		// Sobrescribimos el método para mostrar la información del Operativo
-		public override void MostrarInfo()
-		{
-			Console.WriteLine($"(Operativo) Nombre: {Nombre}, Cargo: {Cargo}, Salario: {Salario:C}");
-		}
+	public Alimento(string nombre, double precio, string fechaExpiracion) : base(nombre, precio)
+	{
+		FechaExpiracion = fechaExpiracion;
 	}
 
-	// Clase principal
-	class Program
+	// Implementación del método MostrarDetalles con información específica de alimentos.
+	public override void MostrarDetalles()
 	{
-		static void Main()
+		Console.WriteLine($"Alimento: {Nombre}, Expira el: {FechaExpiracion}, Precio: ${Precio}");
+	}
+}
+
+// Subclase Ropa
+// Representa productos de ropa e incluye un atributo adicional: Talla.
+class Ropa : Producto
+{
+	private string Talla;
+
+	public Ropa(string nombre, double precio, string talla) : base(nombre, precio)
+	{
+		Talla = talla;
+	}
+
+	// Implementación del método MostrarDetalles con información específica de ropa.
+	public override void MostrarDetalles()
+	{
+		Console.WriteLine($"Ropa: {Nombre}, Talla: {Talla}, Precio: ${Precio}");
+	}
+}
+
+// Clase principal para demostrar el polimorfismo
+class Inventario
+{
+	static void Main()
+	{
+		// Se crea un arreglo de productos que almacena diferentes tipos de productos.
+		Producto[] productos = new Producto[] {
+						new Electronico("Laptop", 1200.99, "Dell"),
+						new Alimento("Manzana", 0.99, "15-04-2025"),
+						new Ropa("Camiseta", 19.99, "M")
+				};
+
+		// Se recorre el arreglo y se llama al método MostrarDetalles de cada producto.
+		// Gracias al polimorfismo, se ejecuta la versión específica de cada subclase.
+		foreach (Producto producto in productos)
 		{
-			List<Empleado> empleados = new List<Empleado>();
-
-			// Agregar empleados de tipo Administrativo y Operativo
-			empleados.Add(new EmpleadoAdministrativo("Carlos López", 4000));
-			empleados.Add(new EmpleadoOperativo("Marta Pérez", 2800));
-
-			// Mostrar empleados
-			Console.WriteLine("Lista de empleados:");
-			foreach (var emp in empleados)
-			{
-				emp.MostrarInfo();
-				double bonificacion = emp.CalcularBonificacion();
-				Console.WriteLine($"Bonificación: {bonificacion:C}");
-				Console.WriteLine();
-			}
+			producto.MostrarDetalles();
 		}
 	}
 }
